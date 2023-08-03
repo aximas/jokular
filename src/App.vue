@@ -1,17 +1,38 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Main />
+  <Time :hours="hours" :minutes="minutes" :seconds="seconds"/>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import Time from '@/components/Time.vue'
+import Main from '@/components/Main.vue'
 
-export default {
-  name: 'App',
+@Options({
   components: {
-    HelloWorld
+    Time,
+    Main
+  },
+  created() {
+    setInterval(this.updateTime, 1000)
+  },
+  data(){
+    return {
+      hours: new Date().getHours(),
+      minutes: new Date().getMinutes(),
+      seconds: new Date().getSeconds(),
+    }
+  },
+  methods: {
+    updateTime() {
+        this.hours = new Date().getHours();
+        this.minutes = new Date().getMinutes();
+        this.seconds = new Date().getSeconds();
+    }
   }
-}
+})
+export default class App extends Vue {}
 </script>
 
 <style>
