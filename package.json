@@ -5,10 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prettier": "prettier --config .prettierrc ./src/**/*.{ts,vue,js} --write"
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "pinia": "^2.1.6",
+    "sass": "^1.65.1",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0"
   },
@@ -22,8 +25,12 @@
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-vue": "^8.0.3",
+    "prettier": "^3.0.1",
+    "sass-loader": "^13.3.2",
     "typescript": "~4.5.5"
   },
   "eslintConfig": {
@@ -34,15 +41,21 @@
     "extends": [
       "plugin:vue/vue3-essential",
       "eslint:recommended",
-      "@vue/typescript"
+      "@vue/typescript",
+      "plugin:prettier/recommended"
     ],
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
     },
     "rules": {
       "vue/multi-word-component-names": 0,
-      "no-unused-vars": "off"
-    }
+      "no-unused-vars": "off",
+      "prettier/prettier": 2
+    },
+    "plugins": [
+      "prettier",
+      "@typescript-eslint"
+    ]
   },
   "browserslist": [
     "> 1%",

@@ -1,1 +1,1 @@
-export type PartsType = 'twopart' | 'single'
+export type PartsType = 'twopart' | 'single';
