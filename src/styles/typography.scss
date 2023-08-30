@@ -11,3 +11,7 @@
 .body {
   @include body;
 }
+
+.body-sm {
+  @include body-sm;
+}

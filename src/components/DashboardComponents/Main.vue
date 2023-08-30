@@ -2,12 +2,13 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import { useJokesStore } from '@/core/store/jokes/useJokesStore';
 import { storeToRefs } from 'pinia';
-import puzzle from '@/assets/img/puzzle.png';
+import PuzzleImg from '@/assets/img/puzzle.png';
+import { JokeInterface } from '@/core/models/interfaces/joke.interface';
 
 export default defineComponent({
 	data() {
 		return {
-			puzzleSrc: puzzle,
+			puzzleSrc: PuzzleImg,
 			isShowClue: false
 		};
 	},
@@ -23,27 +24,52 @@ export default defineComponent({
 		onMounted(async () => {
 			await jokesStore.getData();
 
-			if (data) {
-				if (data?.value && data.value.setup && data.value.delivery) {
-					jokeText.value = data.value.setup;
-					jokeClue.value = data.value.delivery;
-					isJokeHasClue.value = true;
-				} else if (data?.value?.joke) {
-					jokeText.value = data.value.joke;
-				}
+			if (data.value) {
+				setJokeData(data.value);
 			}
 		});
 
+		function setJokeData(data: JokeInterface) {
+			if (data) {
+				if (data && data.setup && data.delivery) {
+					jokeText.value = data.setup;
+
+					jokeClue.value = data.delivery;
+					isJokeHasClue.value = true;
+				} else if (data?.joke) {
+					jokeText.value = data.joke;
+
+					jokeClue.value = '';
+					isJokeHasClue.value = false;
+				}
+			}
+		}
+
 		return {
 			jokeText,
-			isLoading,
 			jokeClue,
-			isJokeHasClue
+			isLoading,
+			isJokeHasClue,
+			data,
+			setJokeData,
+			jokesStore
 		};
 	},
 	methods: {
-		showClue() {
-			if (!this.isShowClue) this.isShowClue = true;
+		handleShowClue(state: boolean) {
+			this.isShowClue = state;
+		},
+		async getNewJoke() {
+			this.handleShowClue(false);
+			await this.jokesStore.getData();
+		}
+	},
+	watch: {
+		data: {
+			handler(updatedData) {
+				this.setJokeData(updatedData);
+			},
+			deep: true
 		}
 	}
 });
@@ -56,12 +82,21 @@ export default defineComponent({
 			<h3 v-else class="h3">{{ jokeText }}</h3>
 			<div :class="{ additional: true }" v-show="isJokeHasClue">
 				<p class="body">Not understand ?</p>
-				<button class="btn yellow" :class="{ button: true }" @click="showClue">
+				<button
+					class="btn warning"
+					:class="{ button: true }"
+					@click="handleShowClue(true)"
+				>
 					<img :src="puzzleSrc" alt="puzzle" />
 				</button>
 				<p class="title" :class="{ jokeClueText: true }" v-show="isShowClue">
 					{{ jokeClue }}
 				</p>
+			</div>
+			<div :class="{ controls: true }">
+				<button class="btn primary borderLess body-sm" @click="getNewJoke">
+					Generate new
+				</button>
 			</div>
 		</div>
 	</main>
@@ -72,14 +107,17 @@ export default defineComponent({
 	margin-top: 64px;
 }
 
-.btn {
+.button {
 	width: 80px;
 	height: 60px;
 	margin-top: 6px;
-	border-radius: 8px;
 }
 
 .jokeClueText {
 	margin-top: 20px;
+}
+
+.controls {
+	margin-top: 36px;
 }
 </style>

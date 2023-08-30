@@ -11,3 +11,7 @@
 @mixin body {
   font-size: 1rem;
 }
+
+@mixin body-sm {
+  font-size: 0.875rem;
+}
