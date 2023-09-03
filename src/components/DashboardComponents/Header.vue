@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import logo from '@/assets/img/logo.png';
+import logo from '@/assets/img/Logo_JL.png';
 
 export default defineComponent({
 	data() {

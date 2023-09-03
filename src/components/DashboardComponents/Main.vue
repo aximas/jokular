@@ -83,7 +83,7 @@ export default defineComponent({
 			<div :class="{ additional: true }" v-show="isJokeHasClue">
 				<p class="body">Not understand ?</p>
 				<button
-					class="btn warning"
+					class="btn warning animated"
 					:class="{ button: true }"
 					@click="handleShowClue(true)"
 				>
